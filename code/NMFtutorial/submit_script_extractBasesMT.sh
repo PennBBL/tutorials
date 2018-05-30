@@ -28,7 +28,7 @@
 #$ -e /cbica/projects/pncNmf/NMFtutorial/results/extractBasesMT.$JOB_ID.stderr
 ####
 #### My email address:
-#$ -M anup@pennmedicine.upenn.edu
+#$ -M {YOUR EMAIL ADDRESS HERE} 
 #### send mail at the beginning of the job
 #$ -m b #### send mail at the beginning of the job
 #$ -m e #### send mail at the end of the job
