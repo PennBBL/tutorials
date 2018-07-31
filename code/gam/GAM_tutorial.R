@@ -4,6 +4,7 @@
 require(ggplot2)
 require(mgcv)
 require(visreg)
+require(RLRsim)
 
 ##########################################################
 ## Define sample of participants with CNB factor scores ##
@@ -23,6 +24,12 @@ n882_net_df$F4_Social_Cognition_Efficiency <- as.numeric(as.character(n882_net_d
 ## Remove subjects with missing cognitive data ##
 #################################################
 n880_cog_df <- n882_net_df[!is.na(n882_net_df$F3_Executive_Efficiency),]
+
+####################################
+## Examine data for non-linearity ##
+####################################
+model<-gamm(F3_Executive_Efficiency~s(age_in_yrs)+Sex, data=n880_cog_df)
+exactRLRT(model$lme, nsim=10000)
 
 #############################################################
 ## Fit GAM to estimate Age effects on Executive Efficiency ##
@@ -64,18 +71,18 @@ ExecEff_Age_plot <- ggplot() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank())
 
 dev.off()
+
+## Export image
+png(filename="/data/joy/BBL/tutorials/exampleData/gam/ExecEfficiency_Age_GAM_fit.png")
 ExecEff_Age_plot
-
-# Export pdf
-pdf(file="/data/joy/BBL/tutorials/exampleData/gam/ExecEfficiency_Age_GAM_fit.pdf", width=7, height=6)
-
+dev.off()
 
 #############################################
 ## Fit GAM to estimate Age*Sex interaction ##
 #############################################
 
 # Note again that Sex must me an *ordered* factor
-ExecEff_AgeSex_gam <- gam(F3_Executive_Efficiency ~ s(age_in_yrs, by=Sex, k=4) + Sex, method="REML", data = n880_cog_df)
+ExecEff_AgeSex_gam <- gam(F3_Executive_Efficiency ~ s(age_in_yrs, k=4)+ s(age_in_yrs, by=Sex, k=4) + Sex, method="REML", data = n880_cog_df)
 
 #####################
 ## Look at results ##
