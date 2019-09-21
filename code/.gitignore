@@ -1,0 +1,6 @@
+# a template gitignore file
+# add this to your git repository BEFORE
+# you clone it to a public forum (eg github)
+
+data/       # to ignore your data folder
+results/    # to ignore your results folder
